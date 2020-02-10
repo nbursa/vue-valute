@@ -5,19 +5,21 @@
       <li
         v-for="(currency, index) in currencies"
         :key="index"
-        @click.stop="editCurrency(currency.id)"
+        @click.stop="active = index; editCurrency(currency.id)"
+        @blur="active = undefined"
+        :class="{active: index == active, hover: index == hover}"
         class="sidebar-list__item d-flex justify-content-between align-items-center"
       >
         {{ currency.iso }}
         <div
           @click.stop="deleteCurrency(currency.id)"
           class="sidebar-list__item-button"
+          @mouseover="hover = index"
+          @mouseleave="hover = undefined"
         >Delete</div>
       </li>
     </ul>
     <div class="sidebar-button" @click.prevent="addCurrency()">Add Currency</div>
-    Currencies: {{ currencies }}
-    <br />
   </div>
 </template>
 
@@ -27,7 +29,9 @@ export default {
   props: ['currencies'],
   data () {
     return {
-      filtered: []
+      filtered: [],
+      active: undefined,
+      hover: undefined
     }
   },
   methods: {
@@ -41,7 +45,8 @@ export default {
       if (this.$route.path !== '/add') this.$router.push('/add')
     },
     editCurrency: function (id) {
-      (this.$route.path !== '/edit?id=' + id) && this.$router.push({ path: '/edit', query: { id } })
+      // this.active = !this.active
+      if (this.$route.path !== '/edit?id=' + id) this.$router.push({ path: '/edit', query: { id } })
     },
     homePage: function () {
       if (this.$route.path !== '/') this.$router.push('/')
@@ -49,6 +54,12 @@ export default {
     emit: function (data) {
       this.$emit('filtered-items', data)
     }
+  },
+  destroyed () {
+    this.filtered = []
+    this.$props.curencies = []
+    this.active = undefined
+    this.hover = undefined
   }
 }
 </script>
@@ -77,16 +88,30 @@ export default {
     padding: 0;
     margin: 0;
     &__item {
-      padding: 10px 0;
       border: 0;
       border-bottom: 1px solid #cccccc;
+      height: 50px;
       cursor: default;
+      &.hover {
+        color: lighten(#737373, 15%);
+        background-color: darken(#eeeeee, 3%);
+        .sidebar-list__item-button {
+          color: #737373;
+          background-color: darken(#eeeeee, 12%);
+        }
+      }
       &-button {
         border: 0;
         outline: none;
         font-size: 0.5rem;
         padding: 9px 10px;
         cursor: pointer;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+      &.active {
+        background-color: darken(#eeeeee, 10%);
       }
     }
   }

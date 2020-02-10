@@ -44,7 +44,7 @@ export default {
     this.getCurrency(this.id)
   },
   computed: {
-    id () {
+    id: function () {
       return this.$route.query.id
     }
   },
@@ -60,7 +60,7 @@ export default {
     getCurrency: function (id) {
       this.currencies.map(currency => {
         if (currency.id === id) {
-          this.iso = currency.iso
+          this.iso = currency.iso.toUpperCase()
           this.symbol = currency.symbol
         }
       })

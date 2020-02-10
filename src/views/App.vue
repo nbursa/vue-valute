@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="container-flex d-flex flex-wrap">
-    <Navigation></Navigation>
+    <Navigation :currencies="currencies" @results="getSearch"></Navigation>
     <Sidebar :currencies="currencies" @filtered-items="receiveEventData"></Sidebar>
-    <router-view :currencies="currencies" :id="id" @filtered-items="receiveEventData"/>
+    <router-view :currencies="currencies" :id="id" @filtered-items="receiveEventData" :result="results"/>
   </div>
 </template>
 <script>
@@ -12,8 +12,13 @@ export default {
   name: 'App',
   data () {
     return {
-      currencies: []
+      currencies: [],
+      results: []
     }
+  },
+  created () {
+    this.currencies = JSON.parse(localStorage.getItem('currencies')) || []
+    console.log(this.currencies)
   },
   computed: {
     id () {
@@ -23,6 +28,10 @@ export default {
   methods: {
     receiveEventData (data) {
       this.currencies = data
+      localStorage.setItem('currencies', JSON.stringify(data))
+    },
+    getSearch (result) {
+      this.results = result
     }
   },
   components: {

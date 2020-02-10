@@ -38,7 +38,6 @@ export default {
   watch: {
     iso: function (iso) {
       iso = iso.toUpperCase()
-      console.log('iso ', iso)
     }
   },
   methods: {

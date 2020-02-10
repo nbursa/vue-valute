@@ -18,7 +18,6 @@ export default {
   },
   created () {
     this.currencies = JSON.parse(localStorage.getItem('currencies')) || []
-    console.log(this.currencies)
   },
   computed: {
     id () {

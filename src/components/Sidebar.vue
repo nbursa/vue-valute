@@ -45,7 +45,6 @@ export default {
       if (this.$route.path !== '/add') this.$router.push('/add')
     },
     editCurrency: function (id) {
-      // this.active = !this.active
       if (this.$route.path !== '/edit?id=' + id) this.$router.push({ path: '/edit', query: { id } })
     },
     homePage: function () {
